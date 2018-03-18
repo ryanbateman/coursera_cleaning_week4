@@ -48,4 +48,4 @@ all_data <- tidyActivities(all_data)
 ## Summarise the data
 summary <- all_data %>% group_by(subjectid, activity) %>% summarise(average_mean = mean(mean), average_sd = mean(standarddeviation))
 
-write.csv(summary, "data/summarised_data.csv", sep = ",")
+write.csv(summary, "data/summarised_data.csv")
