@@ -9,7 +9,7 @@ loadDataSet <- function(datasetfile, labelfile, subjectsfile) {
     ## Combine the labels and subjects
     datalabels <- cbind(datasubjects, datalabels)
     ## Give the data the appropriate headings
-    names(datalabels) <- c("subjectid", "activityid")
+    names(datalabels) <- c("subjectId", "activityId")
     ## Calculate the mean and standard deviation for each row
     dataColumnNames <- colnames(dataset)
     dataset <- dataset %>% transmute(mean = rowMeans(.[dataColumnNames]), standarddeviation = rowSds(as.matrix(.[dataColumnNames])))
@@ -46,6 +46,6 @@ all_data <- rbind(testData, trainingData)
 all_data <- tidyActivities(all_data)
 
 ## Summarise the data
-summary <- all_data %>% group_by(subjectid, activity) %>% summarise(average_mean = mean(mean), average_sd = mean(standarddeviation))
+summary <- all_data %>% group_by(subjectId, activity) %>% summarise(averageMean = mean(mean), averageStandardDeviation = mean(standarddeviation))
 
-write.csv(summary, "data/summarised_data.csv")
+write.table(summary, "summarised_data.txt", row.name = FALSE)
