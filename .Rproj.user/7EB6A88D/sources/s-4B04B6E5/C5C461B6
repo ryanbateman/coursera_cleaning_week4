@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1521368104622.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C5C461B6",
+    "lastKnownWriteTime" : 8171062580698152966,
+    "last_content_update" : 1521368104622,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1026C25D",
+        "caption" : "training_labels",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=training_labels&cache_key=1026C25D",
+        "displayedObservations" : 7352,
+        "environment" : "",
+        "object" : "training_labels",
+        "preview" : 0,
+        "totalObservations" : 7352,
+        "variables" : 1
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
