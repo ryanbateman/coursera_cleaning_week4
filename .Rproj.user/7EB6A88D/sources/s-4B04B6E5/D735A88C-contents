@@ -10,9 +10,9 @@ loadDataSet <- function(datasetfile, labelfile, subjectsfile) {
     datalabels <- cbind(datasubjects, datalabels)
     ## Give the data the appropriate headings
     names(datalabels) <- c("subjectid", "activityid")
-    training_names <- colnames(dataset)
     ## Calculate the mean and standard deviation for each row
-    dataset <- dataset %>% transmute(mean = rowMeans(.[training_names]), standarddeviation = rowSds(as.matrix(.[training_names])))
+    dataColumnNames <- colnames(dataset)
+    dataset <- dataset %>% transmute(mean = rowMeans(.[dataColumnNames]), standarddeviation = rowSds(as.matrix(.[dataColumnNames])))
     ## Merge the labels and the newly calculated data
     mergedData <- cbind(datalabels, dataset)
     mergedData
