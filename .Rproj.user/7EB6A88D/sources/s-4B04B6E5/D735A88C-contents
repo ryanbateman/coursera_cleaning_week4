@@ -18,8 +18,14 @@ loadDataSet <- function(datasetfile, labelfile, subjectsfile) {
     mergedData
 }
 
-## This loads the activity names and their requisite IDs
-activity_labels <- read.csv("data/activity_labels.txt", header = FALSE, sep = " ", col.names = c("id", "activity"))
+## This function tidies the activity titles, turning them into something more readable than IDs
+tidyActivities <- function(allData) {
+    ## This loads the activity names and their requisite IDs
+    activity_labels <- read.csv("data/activity_labels.txt", header = FALSE, sep = " ", col.names = c("id", "activity"))
+    all_data$activity <- tolower(activity_labels$activity[match(all_data$activity, activity_labels$id)])
+    all_data$activity <- gsub("_", " ", all_data$activity)
+    all_data
+}
 
 ## Set up the training and test files required
 trainingDataFile <- "data/train/X_train.txt"
@@ -37,8 +43,9 @@ testData <- loadDataSet(testDataFile, testLabelsFile, testSubjectsFile)
 all_data <- rbind(testData, trainingData)
 
 ## Turn activity IDs into activity labels
-all_data$activity <- tolower(activity_labels$activity[match(all_data$activity, activity_labels$id)])
-all_data$activity <- gsub("_", " ", all_data$activity)
+all_data <- tidyActivities(all_data)
 
 ## Summarise the data
 summary <- all_data %>% group_by(subjectid, activity) %>% summarise(average_mean = mean(mean), average_sd = mean(standarddeviation))
+
+write.csv(summary, "data/summarised_data.csv", sep = ",")
