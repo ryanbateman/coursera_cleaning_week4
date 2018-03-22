@@ -8,15 +8,18 @@ The data obtained from the above URL is downloaded and placed into a 'data' fold
 
 The script `runAnalysis.R` performs the following steps for the two data sets, `test` and `training`. 
 
+- Loads the features 
+
 For each data set it runs the function `loadDataSet` which:
 - Loads the data set file containing the observations (e.g. `X_test.txt`)
+- Associate the relevant columns with their names, as pulled from the features file
 - Loads the subjects file containing the list of subject IDs associated with the above observations (e.g. `subject_test.txt`)
 - Loads the labels file containing the activity IDs associated with the observations (e.g. `y_text.txt`)
 - Combine the labels and subject file into a single dataframe, given they are of the same length and order
-- Calculate the mean and standard deviation for each observation, replacing the observations' individual values with simply these two values
+- Obtain all readings which have either 'mean' or 'std' in their name, regardless of case
 - Merge the calculated mean and standard deviation with the subject and activity ID data
 - Return this data frame
 
-Having loaded the `test` and `training` data sets with the above function, the script will then append one dataset to the other. The function `tidyActivities` is then run, and the combined dataset has its associated activity IDs replaced with human readable labels which were obtained by reading the `data/activity_labels.txt` file.   
+Having loaded the `test` and `training` data sets with the above function, the script will then append one dataset to the other. The function `tidyActivities` is then run, and the combined dataset has its associated activity IDs replaced with human readable labels which were obtained by reading the `data/activity_labels.txt` file. This is turned into a factor to ensure data integrity.  
 
-The data frame is then summarised by grouping it by subject and activity, and returning the average value of the mean and standard deviation values calculated for each grouping. This summarised data is then outputted to the `summarised_data.csv` file. 
+The data frame is then summarised by grouping it by subject and activity, and returning the average value of the mean and standard deviation values calculated for each grouping. This summarised data is then outputted to the `summarised_data.txt` file with the `write.table` command as specified. This creates a 'wide' dataset. 
