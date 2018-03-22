@@ -2,7 +2,7 @@
 Variable | Data class | Description
 --- | --- | ---
 subjectId | integer | The subject in question's unique identifier
-activity | character | A description of the activity the user was undertaking when these measurements were made. Includes `laying` / `sitting` / `standing` / `walking` / `walking downstairs` / `walking upstairs`
+activity | factor | A description of the activity the user was undertaking when these measurements were made. Includes `laying` / `sitting` / `standing` / `walking` / `walking downstairs` / `walking upstairs`
 tBodyAcc-mean()-X | numeric | A mean of the relevant variable as defined in the original data's codebook
 tBodyAcc-mean()-Y | numeric | A mean of the relevant variable as defined in the original data's codebook
 tBodyAcc-mean()-Z | numeric | A mean of the relevant variable as defined in the original data's codebook

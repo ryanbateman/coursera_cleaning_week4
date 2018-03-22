@@ -31,6 +31,7 @@ tidyActivities <- function(allData) {
     activity_labels <- read.csv("data/activity_labels.txt", header = FALSE, sep = " ", col.names = c("id", "activity"))
     all_data$activity <- tolower(activity_labels$activity[match(all_data$activity, activity_labels$id)])
     all_data$activity <- gsub("_", " ", all_data$activity)
+    all_data$activity <- as.factor(all_data$activity)
     all_data$activityId <- NULL
     all_data
 }
@@ -57,24 +58,3 @@ all_data <- tidyActivities(all_data)
 summary <- all_data %>% group_by(subjectId, activity) %>% summarise_each(funs(mean))
 
 write.table(summary, "summarised_data.txt", row.name = FALSE)
-
-df <- data.frame(
-    row.names = NULL,
-    column.names = names(summary),
-    class = sapply(summary, class),
-    range = sapply(summary, function(x)
-        if (class(x) == "factor")
-            paste(levels(x), collapse = " / ")
-        else if (class(x) == "numeric" ||
-                 class(x) == "integer")
-            paste(min(x), max(x), sep = "  /  ")
-        else
-            class(x)),
-    mean = sapply(summary, function(x)
-        if (class(x) == "numeric")
-            mean(x)
-        else
-            "Not available")
-)
-write.table(df, "codeBook.md", sep = " | ")
-
