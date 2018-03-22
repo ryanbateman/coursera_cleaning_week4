@@ -1,18 +1,25 @@
 require(dplyr)
-require(matrixStats)
 
 ## This function loads a data set, given the data, label and subjects file common to the test and training data sets
 loadDataSet <- function(datasetfile, labelfile, subjectsfile) {
+    # Read the list of features, as we'll need these to correlate the columns
+    features <- read.table("data/features.txt")[,2]
+    
+    # Read the dataset file, subsetting the relevant columns containing either std or mean
     dataset <- read.table(datasetfile)
+    names(dataset) <- features
+    relevantcolumns <- grepl("std|mean", names(dataset), ignore.case = TRUE)
+    dataset <- dataset[relevantcolumns] 
+    
+    # Read the labels and subjects
     datalabels <- read.table(labelfile)
     datasubjects <- read.table(subjectsfile)
     ## Combine the labels and subjects
     datalabels <- cbind(datasubjects, datalabels)
+    
     ## Give the data the appropriate headings
     names(datalabels) <- c("subjectId", "activityId")
-    ## Calculate the mean and standard deviation for each row
-    dataColumnNames <- colnames(dataset)
-    dataset <- dataset %>% transmute(mean = rowMeans(.[dataColumnNames]), standarddeviation = rowSds(as.matrix(.[dataColumnNames])))
+    
     ## Merge the labels and the newly calculated data
     mergedData <- cbind(datalabels, dataset)
     mergedData
@@ -24,6 +31,7 @@ tidyActivities <- function(allData) {
     activity_labels <- read.csv("data/activity_labels.txt", header = FALSE, sep = " ", col.names = c("id", "activity"))
     all_data$activity <- tolower(activity_labels$activity[match(all_data$activity, activity_labels$id)])
     all_data$activity <- gsub("_", " ", all_data$activity)
+    all_data$activityId <- NULL
     all_data
 }
 
@@ -46,6 +54,27 @@ all_data <- rbind(testData, trainingData)
 all_data <- tidyActivities(all_data)
 
 ## Summarise the data
-summary <- all_data %>% group_by(subjectId, activity) %>% summarise(averageMean = mean(mean), averageStandardDeviation = mean(standarddeviation))
+summary <- all_data %>% group_by(subjectId, activity) %>% summarise_each(funs(mean))
 
 write.table(summary, "summarised_data.txt", row.name = FALSE)
+
+df <- data.frame(
+    row.names = NULL,
+    column.names = names(summary),
+    class = sapply(summary, class),
+    range = sapply(summary, function(x)
+        if (class(x) == "factor")
+            paste(levels(x), collapse = " / ")
+        else if (class(x) == "numeric" ||
+                 class(x) == "integer")
+            paste(min(x), max(x), sep = "  /  ")
+        else
+            class(x)),
+    mean = sapply(summary, function(x)
+        if (class(x) == "numeric")
+            mean(x)
+        else
+            "Not available")
+)
+write.table(df, "codeBook.md", sep = " | ")
+
