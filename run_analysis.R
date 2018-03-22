@@ -55,6 +55,6 @@ all_data <- rbind(testData, trainingData)
 all_data <- tidyActivities(all_data)
 
 ## Summarise the data
-summary <- all_data %>% group_by(subjectId, activity) %>% summarise_each(funs(mean))
+summary <- all_data %>% group_by(subjectId, activity) %>% summarise_all(funs(mean))
 
 write.table(summary, "summarised_data.txt", row.name = FALSE)
